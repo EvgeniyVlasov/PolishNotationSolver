@@ -21,39 +21,43 @@ int is_full() {
 }
 
 
-void push(float item) {
+int push(float item) {
     if (is_full()) {
         printf("stack overflow");
-        exit(1);
+        return 1;
     }
     else {
         top++;
         stack[top] = item;
+        return 0;
     }
 }
 
-float peek() {
+int peek(float* buffer) {
     if (is_empty()) {
         printf("stack underflow");
-        exit(1);
+        return 1;
     }
     else {
-        return stack[top];
+        *buffer = stack[top];
+        return 0;
     }
 }
 
-float pop() {
+int pop(float* buffer) {
     if (is_empty()) {
         printf("stack underflow");
-        exit(1);
+        return 1;
     }
     else {
         float item = stack[top];
         top--;
-        return item;
+        *buffer = item;
+        return 0;
     }
 }
 
 void clear_stack() {
     top = -1;
 }
+
