@@ -1,10 +1,10 @@
 /*
 
-Файл называется "polish_notation_solver.c".
-Программа решает арифметическое выражение в форме обратной польсокой записи.
-Этот файл выполняет решение выражения в обратной польской записи.
+Р¤Р°Р№Р» РЅР°Р·С‹РІР°РµС‚СЃСЏ "polish_notation_solver.c".
+РџСЂРѕРіСЂР°РјРјР° СЂРµС€Р°РµС‚ Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРѕРµ РІС‹СЂР°Р¶РµРЅРёРµ РІ С„РѕСЂРјРµ РѕР±СЂР°С‚РЅРѕР№ РїРѕР»СЊСЃРѕРєРѕР№ Р·Р°РїРёСЃРё.
+Р­С‚РѕС‚ С„Р°Р№Р» РІС‹РїРѕР»РЅСЏРµС‚ СЂРµС€РµРЅРёРµ РІС‹СЂР°Р¶РµРЅРёСЏ РІ РѕР±СЂР°С‚РЅРѕР№ РїРѕР»СЊСЃРєРѕР№ Р·Р°РїРёСЃРё.
 
-Программу написал: Власов Евгений Максиович, группа ИВТ-13БО.
+РџСЂРѕРіСЂР°РјРјСѓ РЅР°РїРёСЃР°Р»: Р’Р»Р°СЃРѕРІ Р•РІРіРµРЅРёР№ РњР°РєСЃРёРѕРІРёС‡, РіСЂСѓРїРїР° РР’Рў-13Р‘Рћ.
 
 */
 
@@ -12,122 +12,55 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define STACK_SIZE 100
-//Стек
-float stack[STACK_SIZE];
-//Указатель на вершину стека. Изначально он = -1.
-int top = -1;
-
-//Функция проверки, пуст стек или нет.
-static int is_empty() {
-    if (top == -1) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
-//Функция проверки, полон стек или нет.
-static int is_full() {
-    if (top == STACK_SIZE - 1) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
-//Функция добавления элемента в стек.
-static void push(float item) {
-    if (is_full()) {
-        printf("Incorrect expression: stack overflow.\n");
-		system("pause");
-        exit(1);
-    }
-    else {
-        top++;
-        stack[top] = item;
-    }
-}
-
-//Функция удаления элемента из стека.
-static float pop() {
-    if (is_empty()) {
-        printf("Incorrect expression: stack underflow.\n");
-		system("pause");
-        exit(1);
-    }
-    else {
-        float item = stack[top];
-        top--;
-        return item;
-    }
-}
-
-//Функция подсчёта выражения в обратной польской записи.
+//Р¤СѓРЅРєС†РёСЏ РїРѕРґСЃС‡С‘С‚Р° РІС‹СЂР°Р¶РµРЅРёСЏ РІ РѕР±СЂР°С‚РЅРѕР№ РїРѕР»СЊСЃРєРѕР№ Р·Р°РїРёСЃРё.
 float calculate_value(char* expression_in_rpn) {
-	//Оставшаяся часть выражения.
+    clear_stack();
     char* context = NULL;
-	//Символ или число выражения.
     char* token = strtok_s(expression_in_rpn, " ", &context);
 
-	//Первый аргумент.
-	float first_arg;
-	//Второй аргумент.
+    float first_arg;
     float second_arg;
-	//Пока выражение не закончилось...
     while (token != NULL) {
-		//Если это "+", то сложить второе число с первым и добавить результат в стек.
         if (!strcmp(token,"+")) {
-            first_arg = pop();
-            second_arg = pop();
+            pop(&first_arg);
+            pop(&second_arg);
             push(second_arg + first_arg);
         }
-		//Иначе если это "-", то вычесть из второго числа первое и добавить результат в стек.
         else if (!strcmp(token, "-")) {
-            first_arg = pop();
-            second_arg = pop();
+            pop(&first_arg);
+            pop(&second_arg);
             push(second_arg - first_arg);
         }
-		//Иначе если это "*", то умножить второе число с первым и добавить результат в стек.
         else if (!strcmp(token, "*")) {
-            first_arg = pop();
-            second_arg = pop();
+            pop(&first_arg);
+            pop(&second_arg);
             push(second_arg * first_arg);
         }
-		//Иначе если это "/", то поделить второе число с первым и добавить результат в стек.
         else if (!strcmp(token, "/")) {
-            first_arg = pop();
-            second_arg = pop();
-			//Если получается деление на ноль, то выдать ошибку.
+            pop(&first_arg);
+            pop(&second_arg);
             if (first_arg == 0) {
-                printf("Can't evaluate expression: zero division occurs.\n");
-				system("pause");
+                printf("can't evaluate expression: zero division occurs");
                 exit(0);
             }
             push(second_arg / first_arg);
         }
-		//Иначе считать число number и добавить его в стек.
         else {
             float number;
-			//Если считалось не число, то выдать ошибку.
             if (!sscanf_s(token, "%f", &number)) {
-                printf("Incorrect expression: unknown token: %s.\n", token);
-				system("pause");
+                printf("\nincorrect expression: unknown token =%s", token);
                 exit(1);
             }
             push(number);
         }
-		//Считать следующий символ или число.
+
         token = strtok_s(NULL, " ", &context);
     }
-	//Результат
-    float result = pop();
-	//Если стек всё ещё не пустой, то вырежение записано неверно и выдать ошибку.
+
+    float result = 0;
+    pop(&result);
     if (!is_empty()) {
-        printf("Incorrect expression: stack must be empty.\n");
-		system("pause");
+        printf("\nincorrect expression: stack must be empty.");
         exit(1);
     }
     return result;
