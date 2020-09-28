@@ -20,7 +20,7 @@ int main(){
 	//Добавление в конец выражения (строки) специального символа, обозначающего конец выражения (строки).
     input[strlen(input) - 1] = '\0';
 	//Вывод итогового значения выражения с исп. функции его подсчёта.
-    printf_s("expression value = %f", calculate_value(input));
+    printf_s("expression value = %.3f\n", calculate_value(input));
 	system("pause");
 	return 0;
 }
