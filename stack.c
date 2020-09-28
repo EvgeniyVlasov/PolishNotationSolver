@@ -1,7 +1,18 @@
+/*
+Файл называется "stack.c".
+Программа решает арифметическое выражение в форме обратной польсокой записи.
+Это файл стека.
+
+Программу написал: Власов Евгений Максиович, группа ИВТ-13БО.
+*/
+
 #define STACK_SIZE 100
+//Стек
 float stack[STACK_SIZE];
+//Указатель на вершину стека. Изначально он = -1.
 int top = -1;
 
+//Функция проверки, пуст стек или нет.
 int is_empty() {
     if (top == -1) {
         return 1;
@@ -11,6 +22,7 @@ int is_empty() {
     }
 }
 
+//Функция проверки, полон стек или нет.
 int is_full() {
     if (top == STACK_SIZE - 1) {
         return 1;
@@ -20,10 +32,10 @@ int is_full() {
     }
 }
 
-
+//Функция добавления элемента в стек.
 int push(float item) {
     if (is_full()) {
-        printf("stack overflow");
+        printf("Stack overflow.");
         return 1;
     }
     else {
@@ -33,9 +45,10 @@ int push(float item) {
     }
 }
 
+//Функция, которая возвращает содержимое вершины стека.
 int peek(float* buffer) {
     if (is_empty()) {
-        printf("stack underflow");
+        printf("Stack underflow.");
         return 1;
     }
     else {
@@ -44,9 +57,10 @@ int peek(float* buffer) {
     }
 }
 
+//Функция удаления элемента из стека.
 int pop(float* buffer) {
     if (is_empty()) {
-        printf("stack underflow");
+        printf("Stack underflow.");
         return 1;
     }
     else {
@@ -57,6 +71,7 @@ int pop(float* buffer) {
     }
 }
 
+//Функция, которая перемещает указатель стека на его начало.
 void clear_stack() {
     top = -1;
 }
