@@ -8,4 +8,5 @@
 
 //Защита от множественного включения.
 #pragma once
+//Функция подсчёта выражения в обратной польской записи.
 float calculate_value(char* expression_in_rpn);
